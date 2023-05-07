@@ -33,7 +33,6 @@ public class AudioManager : MonoBehaviour, IGameManager {
     void Awake() {
         if (mSlider != null)
             mSlider.value = PlayerPrefs.GetFloat("Volume");
-        int count = 0;
         foreach (Sound s in sounds) {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
