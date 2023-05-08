@@ -8,7 +8,7 @@ public class JustWalk : MonoBehaviour
     private int isWalkingHash;
     private int isFoundTargetHash;
     private CharacterController charController;
-
+    private EnemyVision vision;
 
     // Start is called before the first frame update
     void Start()
@@ -17,6 +17,7 @@ public class JustWalk : MonoBehaviour
         isWalkingHash = Animator.StringToHash("isWalking");
         isFoundTargetHash = Animator.StringToHash("isFoundTarget");
         charController = GetComponent<CharacterController>();
+        vision = GetComponent<EnemyVision>();
     }
 
     // Update is called once per frame
@@ -31,13 +32,17 @@ public class JustWalk : MonoBehaviour
         }
         else
         {
-            animator.SetBool(isWalkingHash, true);
-            //transform.position += transform.forward * Time.deltaTime * speed;
-            charController.Move(transform.forward * Time.deltaTime * speed);
-            
-            var footsteps = GetComponentInChildren<AudioSource>();
-            if(!footsteps.isPlaying)
-                footsteps.Play();
+             if (!vision.foundPlayer)
+                 animator.SetBool(isWalkingHash, true);
+             transform.position += transform.forward * Time.deltaTime * speed; 
+             if (!vision.foundPlayer) 
+             {
+                charController.Move(transform.forward * Time.deltaTime * speed);
+                var footsteps = GetComponentInChildren<AudioSource>();
+                //animator.SetBool(isWalkingHash, false);
+                if(!footsteps.isPlaying)
+                    footsteps.Play(); 
+             }
         }
        
         

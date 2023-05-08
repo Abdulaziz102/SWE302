@@ -12,6 +12,8 @@ TagManager:
   - Collectable_3
   - Collectable_4
   - audio
+  - Destroyable
+  - Text
   layers:
   - Default
   - TransparentFX

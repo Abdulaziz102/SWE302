@@ -11,11 +11,13 @@ public class EnemyVision : MonoBehaviour
 
     private bool targetKilled = false;
 
+    public bool foundPlayer;
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
         animator.SetBool("isWalking", false);
+        foundPlayer = false;
     }
 
     // Update is called once per frame
@@ -41,6 +43,7 @@ public class EnemyVision : MonoBehaviour
             rot.z = 0;
             transform.rotation = Quaternion.Slerp(transform.rotation, rot, 0.01f);
 
+            foundPlayer = true;
             //animations
             targetScript.ReactToGuard(transform);
             if (!targetKilled) //avoid repeating animation

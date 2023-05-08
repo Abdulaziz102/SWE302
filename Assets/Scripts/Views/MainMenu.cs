@@ -6,7 +6,7 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadSceneAsync("Level0"+FindObjectOfType<Levels>().levelReached);
+        SceneManager.LoadSceneAsync("Level0"+FindObjectOfType<Levels>().getOffset());
     }
 
     public void QuitGame()

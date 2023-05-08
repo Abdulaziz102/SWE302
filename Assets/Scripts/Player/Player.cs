@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,9 +16,9 @@ public class Player : MonoBehaviour {
     private CharacterController charController;
     private Animator animator;
 
-    [SerializeField] private float moveSpeed = 6.0f;
-    [SerializeField] private float speedUpMultiplier = 2.0f;
-    private readonly float gravity = -9.81f;
+    [SerializeField] private float moveSpeed = 4.0f;
+    [SerializeField] private float speedUpMultiplier = 1.3f;
+    private readonly float gravity = -15.81f;
 
 
     private float footstepDistanceCounter = 1.0f;
@@ -26,20 +28,25 @@ public class Player : MonoBehaviour {
 
     private Vector3 characterVelocity;
 
+    private bool jumpPressed;
 
     private float yVelocity = 0.0f;
+
+    public int numberToInteract;
+    public bool interactingWithNum;
+    private List<int> puzzle1 = new List<int>();
 
     // Start is called before the first frame update
     void Start() {
         charController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-
         //start the extradiegetic sound
-        FindObjectOfType<AudioManager>().Play("Level01Extradiegetic");
+        //FindObjectOfType<AudioManager>().Play("Level01Extradiegetic");
     }
 
     // Update is called once per frame
     void Update() {
+        
         if (!LifeManager.Instance.Alive)
             return;
 
@@ -96,7 +103,62 @@ public class Player : MonoBehaviour {
             yVelocity = 0.0f;
         }
 
+        if (Input.GetKeyDown(KeyCode.E) && interactingWithNum)
+        {
+            switch (puzzle1.Count)
+            {
+                case 0:
+                    if (numberToInteract == 4)
+                        puzzle1.Add(4);
+                    else
+                        puzzle1 = new List<int>();
+                    break;
+                case 1:
+                    if (numberToInteract == 3)
+                        puzzle1.Add(3);
+                    else
+                        puzzle1 = new List<int>();
+                    break;
+                case 2:
+                    if (numberToInteract == 1)
+                        puzzle1.Add(1);
+                    else
+                        puzzle1 = new List<int>();
+                    break;
+                case 3:
+                    if (numberToInteract == 2)
+                        puzzle1.Add(2);
+                    else
+                        puzzle1 = new List<int>();
+                    break;
+                case 4:
+                    if (numberToInteract == 5)
+                    {
+                        if(GameObject.FindGameObjectWithTag("Destroyable").gameObject)
+                            Destroy(GameObject.FindGameObjectWithTag("Destroyable").gameObject);
+                        puzzle1.Add(5);
+                    }
+                    else
+                        puzzle1 = new List<int>();
+                    break;
+
+            }
+        }
     }
+
+    // private void FixedUpdate()
+    // {
+    //     Vector3 movement2 = Vector3.zero;
+    //     Debug.Log(charController.velocity.y);
+    //     if (yVelocity<=0 && Input.GetKeyDown(KeyCode.Space))
+    //     {
+    //         yVelocity = 7f;
+    //     }
+    //     if(yVelocity>0)
+    //         yVelocity += gravity * Time.deltaTime;
+    //     movement2.y = yVelocity;
+    //     charController.Move(movement2 * Time.deltaTime);
+    // }
 
     private void FootSteps(bool speedUp, Vector3 movement) {
         float chosenFootstepFrequency = (speedUp ? footstepFrequencyWhileSprinting : footstepFrequency);
@@ -147,9 +209,10 @@ public class Player : MonoBehaviour {
         // Play the shot-gun of the police
         StartCoroutine(ShotGunSound());
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(4.0f);
         Levels.Instance.displayGameOver();
     }
+    
 
     private IEnumerator ShotGunSound() {
         yield return new WaitForSeconds(0);
