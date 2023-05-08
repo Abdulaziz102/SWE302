@@ -136,6 +136,8 @@ public class Player : MonoBehaviour {
                     {
                         if(GameObject.FindGameObjectWithTag("Destroyable").gameObject)
                             Destroy(GameObject.FindGameObjectWithTag("Destroyable").gameObject);
+                        GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("Volume");
+                        GetComponent<AudioSource>().Play();
                         puzzle1.Add(5);
                     }
                     else

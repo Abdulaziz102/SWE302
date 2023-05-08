@@ -6,6 +6,7 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
     {
+        Time.timeScale = 1;
         SceneManager.LoadSceneAsync("Level0"+FindObjectOfType<Levels>().getOffset());
     }
 
